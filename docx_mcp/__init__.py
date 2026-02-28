@@ -1,0 +1,2 @@
+"""DOCX MCP package."""
+
