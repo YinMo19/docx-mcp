@@ -1,21 +1,41 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-This repository is currently a small `uv`-managed Python project for DOCX parsing experiments.
+This repository is an MCP server for DOCX read/write/style operations.
 
-- `main.py`: executable entry point; contains parsing, summarization, and reporting logic.
-- `pyproject.toml`: project metadata and dependencies.
-- `uv.lock`: pinned dependency lockfile (commit this file).
-- `README.md`: reserved for user-facing overview.
-
-As the project grows, move runtime code into a package such as `docx_mcp/` and keep `main.py` as a thin CLI wrapper. Add tests under `tests/` and fixture documents under `tests/fixtures/`.
+- `main.py`: MCP CLI entrypoint (`--transport stdio|sse|streamable-http`).
+- `docx_mcp/server.py`: server creation and tool registration.
+- `docx_mcp/services/`: core document IO and business logic (`read_ops`, `write_ops`, `style_ops`).
+- `docx_mcp/tools/`: MCP-facing wrappers and compatibility parsing (`compat.py`).
+- `tests/`: pytest suite (`test_read_ops.py`, `test_write_ops.py`, `test_style_ops.py`, `test_tool_compat.py`).
+- `.github/workflows/ci.yml`: CI pipeline (lint + typecheck + tests).
 
 ## Build, Test, and Development Commands
-- `uv sync`: create/update the virtual environment from `pyproject.toml` and `uv.lock`.
-- `uv run python main.py /path/to/file.docx`: run the parser on a target document.
-- `uv run python main.py`: run with the script’s default DOCX path.
+- `uv sync --all-groups`: install runtime + dev dependencies.
+- `uv run python main.py --transport stdio`: run local MCP server.
 - `uv add <package>`: add a dependency and update lockfile.
-- `uv run pytest`: run tests (once test files are added).
+- `uv run pytest -q`: run tests.
+- `uv run ruff check .`: lint/import-order checks.
+- `uv run mypy`: type checks for `docx_mcp/` and `main.py`.
+- `./scripts/check.sh`: run all required quality gates in one command.
+
+## Lint & Check Policy
+All commits must pass the following quality gates:
+
+1. `ruff` (`uv run ruff check .`)
+2. `mypy` (`uv run mypy`)
+3. `pytest` (`uv run pytest -q`)
+
+Failure in any gate blocks merge and must be fixed before pushing.
+
+## Commit Hook Enforcement
+A repository-level pre-commit hook is provided at `.githooks/pre-commit` and executes `./scripts/check.sh`.
+
+- Enable hooks once per clone:
+  - `git config core.hooksPath .githooks`
+- Normal commit path:
+  - `git add . && git commit -m "<type>: <message>"`
+- Bypass (`--no-verify`) is only for emergency/debugging and must be justified in PR notes.
 
 ## Coding Style & Naming Conventions
 - Target Python `>=3.13`.
@@ -27,20 +47,31 @@ As the project grows, move runtime code into a package such as `docx_mcp/` and k
 ## Testing Guidelines
 - Use `pytest` for unit and regression tests.
 - Name tests as `tests/test_<feature>.py`.
-- Add fixture-based tests for:
-  - paragraph/style extraction,
-  - table structure counting,
-  - Chinese text handling and Unicode stability.
-- For parser changes, include at least one regression test against a real `.docx` fixture.
+- For parser/style changes, include at least one regression-style DOCX case.
+- Prioritize compatibility tests for string-style MCP inputs (`"1,2,3"`, `"true"`, JSON matrix strings).
 
 ## Commit & Pull Request Guidelines
-There is no established commit history yet; use Conventional Commits going forward:
+Use Conventional Commits:
 - `feat: ...`, `fix: ...`, `docs: ...`, `test: ...`, `refactor: ...`
+- `ci: ...`, `chore: ...`
 
 PRs should include:
 - clear summary of behavior changes,
-- commands run locally (e.g., `uv run python main.py ...`, `uv run pytest`),
-- sample output for parser/reporting changes.
+- commands run locally (`ruff`, `mypy`, `pytest`),
+- sample output or tool call payload/response for MCP behavior changes.
+
+## Roadmap to Thesis-Grade DOCX Styling
+Current implementation is functional but not yet “paper-grade”. Major gaps:
+
+1. Full OOXML style graph handling (`styles.xml`, `numbering.xml`, inheritance resolution).
+2. Section/page layout control (margins, headers/footers, page numbering rules, odd/even pages).
+3. Auto numbering and cross-references (headings, figures, tables, TOC/LOT/LOF fields).
+4. Advanced paragraph controls (widow/orphan, keep-with-next, page-break-before, tab stops).
+5. Chinese academic typography conventions (mixed CJK/Latin spacing and punctuation behavior).
+6. Complex table layout (merge/split cells, precise widths/heights, repeated header rows across pages).
+7. Floating object handling (images/textboxes positioning and wrapping).
+8. Transaction-safe editing and minimal-diff writeback for high reliability.
+9. Broader regression corpus based on real thesis templates and rendering consistency checks.
 
 ## Security & Configuration Tips
 - Do not commit private or sensitive source documents.
