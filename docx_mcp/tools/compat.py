@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import re
-from typing import Any
 
 from docx_mcp.errors import DocxMCPError
 
@@ -148,7 +147,7 @@ def parse_matrix(value: list[list[str]] | str | None, field: str) -> list[list[s
     if value is None:
         return None
     if isinstance(value, list):
-        result: list[list[str]] = []
+        list_rows: list[list[str]] = []
         for row in value:
             if not isinstance(row, list):
                 raise DocxMCPError(
@@ -156,8 +155,8 @@ def parse_matrix(value: list[list[str]] | str | None, field: str) -> list[list[s
                     message=f"{field} must be a 2D list.",
                     details={"field": field, "value": value},
                 )
-            result.append([str(cell) for cell in row])
-        return result
+            list_rows.append([str(cell) for cell in row])
+        return list_rows
 
     raw = value.strip()
     if not raw:
@@ -179,7 +178,7 @@ def parse_matrix(value: list[list[str]] | str | None, field: str) -> list[list[s
                 message=f"{field} JSON must be a 2D list.",
                 details={"field": field, "value": value},
             )
-        result: list[list[str]] = []
+        json_rows: list[list[str]] = []
         for row in parsed:
             if not isinstance(row, list):
                 raise DocxMCPError(
@@ -187,20 +186,20 @@ def parse_matrix(value: list[list[str]] | str | None, field: str) -> list[list[s
                     message=f"{field} JSON must be a 2D list.",
                     details={"field": field, "value": value},
                 )
-            result.append([str(cell) for cell in row])
-        return result
+            json_rows.append([str(cell) for cell in row])
+        return json_rows
 
     # Line-based fallback:
     # "a,b\nc,d" or "a\tb\nc\td"
-    rows = [line for line in raw.splitlines() if line.strip()]
-    result = []
-    for row in rows:
-        if "\t" in row:
-            cells = [c.strip() for c in row.split("\t")]
+    row_lines = [line for line in raw.splitlines() if line.strip()]
+    text_rows: list[list[str]] = []
+    for row_line in row_lines:
+        if "\t" in row_line:
+            cells = [c.strip() for c in row_line.split("\t")]
         else:
-            cells = [c.strip() for c in row.split(",")]
-        result.append(cells)
-    return result
+            cells = [c.strip() for c in row_line.split(",")]
+        text_rows.append(cells)
+    return text_rows
 
 
 def parse_shading(value: list[str] | str | None) -> list[str] | None:

@@ -10,8 +10,8 @@ from docx_mcp.services.write_ops import (
     add_table,
     search_and_replace,
 )
-from docx_mcp.tools.compat import parse_bool, parse_int, parse_matrix, parse_optional_float
 from docx_mcp.tools.common import handle_tool_error
+from docx_mcp.tools.compat import parse_bool, parse_int, parse_matrix, parse_optional_float
 
 
 def register_write_tools(mcp: FastMCP) -> None:

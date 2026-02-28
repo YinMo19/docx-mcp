@@ -25,6 +25,12 @@ uv run python main.py --transport stdio
 uv run pytest -q
 ```
 
+## Quality Checks
+```bash
+uv run ruff check .
+uv run mypy
+```
+
 ## Available MCP Tools
 - Read: `list_available_documents`, `get_document_info`, `get_document_text`, `get_document_outline`, `find_text_in_document`
 - Write: `search_and_replace`, `add_paragraph`, `add_heading`, `add_table`

@@ -56,7 +56,7 @@ def list_docx_files(directory: Path) -> list[Path]:
 
 def open_document(path: Path) -> DocxDocument:
     try:
-        return Document(path)
+        return Document(str(path))
     except Exception as exc:  # pragma: no cover - depends on external file validity
         raise DocxMCPError(
             code="DOCX_OPEN_FAILED",
@@ -91,7 +91,7 @@ def resolve_for_write(filename: str, output_filename: str | None = None) -> tupl
 
 def save_document(doc: DocxDocument, output_path: Path) -> None:
     try:
-        doc.save(output_path)
+        doc.save(str(output_path))
     except Exception as exc:  # pragma: no cover - depends on fs/docx internals
         raise DocxMCPError(
             code="DOCX_SAVE_FAILED",

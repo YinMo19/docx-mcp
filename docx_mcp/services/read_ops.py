@@ -6,7 +6,7 @@ from typing import Any
 
 from docx.document import Document as DocxDocument
 from docx.oxml.ns import qn
-from docx.table import _Cell, Table
+from docx.table import Table, _Cell
 from docx.text.paragraph import Paragraph
 
 from docx_mcp.errors import DocxMCPError

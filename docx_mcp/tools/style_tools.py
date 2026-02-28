@@ -5,6 +5,7 @@ from typing import Any
 from mcp.server.fastmcp import FastMCP
 
 from docx_mcp.services.style_ops import format_table, set_paragraph_format
+from docx_mcp.tools.common import handle_tool_error
 from docx_mcp.tools.compat import (
     parse_auto_fit,
     parse_bool,
@@ -14,14 +15,14 @@ from docx_mcp.tools.compat import (
     parse_paragraph_indices,
     parse_shading,
 )
-from docx_mcp.tools.common import handle_tool_error
 
 
 def register_style_tools(mcp: FastMCP) -> None:
     @mcp.tool(
         name="format_table",
         description=(
-            "Format a table by index with border style, header styling, and optional alternating row shading."
+            "Format a table by index with border style, header styling, "
+            "and optional alternating row shading."
         ),
     )
     def format_table_tool(
@@ -62,7 +63,8 @@ def register_style_tools(mcp: FastMCP) -> None:
     @mcp.tool(
         name="set_paragraph_format",
         description=(
-            "Apply paragraph and run formatting to selected top-level paragraphs by indices or text match."
+            "Apply paragraph and run formatting to selected top-level paragraphs "
+            "by indices or text match."
         ),
     )
     def set_paragraph_format_tool(

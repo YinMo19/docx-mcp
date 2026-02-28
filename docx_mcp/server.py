@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Literal
+
 from mcp.server.fastmcp import FastMCP
 
 from docx_mcp.tools.read_tools import register_read_tools
@@ -15,6 +17,6 @@ def create_server() -> FastMCP:
     return mcp
 
 
-def run_server(transport: str = "stdio") -> None:
+def run_server(transport: Literal["stdio", "sse", "streamable-http"] = "stdio") -> None:
     mcp = create_server()
     mcp.run(transport=transport)
