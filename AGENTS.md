@@ -7,8 +7,30 @@ This repository is an MCP server for DOCX read/write/style operations.
 - `docx_mcp/server.py`: server creation and tool registration.
 - `docx_mcp/services/`: core document IO and business logic (`read_ops`, `write_ops`, `style_ops`).
 - `docx_mcp/tools/`: MCP-facing wrappers and compatibility parsing (`compat.py`).
-- `tests/`: pytest suite (`test_read_ops.py`, `test_write_ops.py`, `test_style_ops.py`, `test_tool_compat.py`).
+- `tests/`: pytest suite (`test_read_ops.py`, `test_write_ops.py`, `test_style_ops.py`, `test_tool_compat.py`, plus new module tests).
 - `.github/workflows/ci.yml`: CI pipeline (lint + typecheck + tests).
+
+## Progress Snapshot
+Completed:
+
+1. MCP read/write/style baseline tools.
+2. Legacy-compatible input parsing layer (string/bool/number/list coercion).
+3. Generic document-level style engine (`apply_document_style`) for page layout + paragraph/heading baseline formatting.
+
+In progress / just added:
+
+1. Generic section header/footer operation (`set_headers_footers`) for:
+   - section targeting,
+   - header/footer text,
+   - PAGE field insertion,
+   - section start page number,
+   - odd/even + first-page header/footer switches.
+
+Next priority after current step:
+
+1. Numbering and cross-reference foundations (heading numbering + TOC field management).
+2. Advanced paragraph pagination controls (keep-with-next, widow/orphan, page-break-before).
+3. Table structure controls (merge/split and deterministic width policies).
 
 ## Build, Test, and Development Commands
 - `uv sync --all-groups`: install runtime + dev dependencies.
@@ -64,7 +86,7 @@ PRs should include:
 Current implementation is functional but not yet “paper-grade”. Major gaps:
 
 1. Full OOXML style graph handling (`styles.xml`, `numbering.xml`, inheritance resolution).
-2. Section/page layout control (margins, headers/footers, page numbering rules, odd/even pages).
+2. Section/page layout control completeness (multi-type section breaks and richer header/footer variants).
 3. Auto numbering and cross-references (headings, figures, tables, TOC/LOT/LOF fields).
 4. Advanced paragraph controls (widow/orphan, keep-with-next, page-break-before, tab stops).
 5. Chinese academic typography conventions (mixed CJK/Latin spacing and punctuation behavior).

@@ -4,7 +4,9 @@ from typing import Literal
 
 from mcp.server.fastmcp import FastMCP
 
+from docx_mcp.tools.document_style_tools import register_document_style_tools
 from docx_mcp.tools.read_tools import register_read_tools
+from docx_mcp.tools.section_tools import register_section_tools
 from docx_mcp.tools.style_tools import register_style_tools
 from docx_mcp.tools.write_tools import register_write_tools
 
@@ -14,6 +16,8 @@ def create_server() -> FastMCP:
     register_read_tools(mcp)
     register_write_tools(mcp)
     register_style_tools(mcp)
+    register_document_style_tools(mcp)
+    register_section_tools(mcp)
     return mcp
 
 
