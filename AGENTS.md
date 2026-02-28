@@ -25,12 +25,17 @@ In progress / just added:
    - PAGE field insertion,
    - section start page number,
    - odd/even + first-page header/footer switches.
+2. Reference foundation tools:
+   - `insert_table_of_contents` (TOC field),
+   - `add_sequence_caption` (SEQ caption field),
+   - `add_bookmark_to_paragraph`,
+   - `insert_ref_field` (REF field).
 
 Next priority after current step:
 
-1. Numbering and cross-reference foundations (heading numbering + TOC field management).
-2. Advanced paragraph pagination controls (keep-with-next, widow/orphan, page-break-before).
-3. Table structure controls (merge/split and deterministic width policies).
+1. Advanced paragraph pagination controls (keep-with-next, widow/orphan, page-break-before).
+2. Table structure controls (merge/split and deterministic width policies).
+3. Heading multilevel numbering style management (`numbering.xml` level).
 
 ## Build, Test, and Development Commands
 - `uv sync --all-groups`: install runtime + dev dependencies.

@@ -7,6 +7,7 @@ A local MCP server for reading, editing, and basic styling of `.docx` files.
 - Phase D compatibility completed: tool inputs now accept legacy string-style values (e.g. `"2"`, `"true"`, `"1,2,3"`, JSON matrix strings).
 - Phase E step 1 completed: generic document-level style/layout engine (`apply_document_style`) is available.
 - Phase E step 2 completed: generic section header/footer and page numbering control (`set_headers_footers`) is available.
+- Phase E step 3 completed: reference foundations (`insert_table_of_contents`, `add_sequence_caption`, bookmark + REF).
 - Test suite is in place with read/write/style/compat coverage.
 
 ## Project Layout
@@ -36,7 +37,8 @@ uv run mypy
 ## Available MCP Tools
 - Read: `list_available_documents`, `get_document_info`, `get_document_text`, `get_document_outline`, `find_text_in_document`
 - Write: `search_and_replace`, `add_paragraph`, `add_heading`, `add_table`
-- Style: `format_table`, `set_paragraph_format`, `apply_document_style`, `set_headers_footers`
+- Style/Layout: `format_table`, `set_paragraph_format`, `apply_document_style`, `set_headers_footers`
+- Reference: `insert_table_of_contents`, `add_sequence_caption`, `add_bookmark_to_paragraph`, `insert_ref_field`
 
 ## Notes
 - The server returns structured errors in `{ ok: false, error: { code, message, details } }` format.
